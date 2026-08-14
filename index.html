@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Jabatan Lesen — Dashboard</title>
+<style>
+:root{
+  --red:#ed101d;
+  --red-dark:#c90009;
+  --ink:#202124;
+  --muted:#777b82;
+  --bg:#f3f4f5;
+  --card:#ffffff;
+  --line:#e9eaec;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Arial,sans-serif;color:var(--ink);background:#222}
+button,input,select{font:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.phone{
+  width:100%;max-width:430px;min-height:100vh;margin:auto;background:var(--bg);
+  overflow:hidden;position:relative;
+}
+.header{
+  height:355px;padding:28px 31px 0;color:#fff;
+  background:
+    radial-gradient(circle at 85% 8%,#ff3040 0,transparent 34%),
+    radial-gradient(circle at 15% 95%,#c8000a 0,transparent 35%),
+    linear-gradient(145deg,#b90008,#f01421);
+  position:relative;overflow:hidden;
+}
+.header:after{
+  content:"";position:absolute;width:310px;height:310px;right:-130px;top:-170px;
+  border-radius:50%;background:#fff1;filter:blur(2px)
+}
+.top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.logo{font-size:22px;font-weight:900;letter-spacing:-.7px}
+.top-actions{display:flex;gap:9px;align-items:center;flex-wrap:nowrap}
+.circle{
+  width:60px;height:60px;border:0;border-radius:50%;background:#fff;color:#282b30;
+  display:grid;place-items:center;font-size:22px;box-shadow:0 8px 20px #7d000015
+}
+.greeting{margin-top:45px;position:relative;z-index:2}
+.greeting small{font-size:19px;opacity:.9}
+.greeting h1{font-size:31px;line-height:1.1;margin:12px 0 18px;letter-spacing:-1px}
+.role{
+  display:inline-block;padding:10px 16px;border:1px solid #ffffff55;border-radius:22px;
+  background:#ffffff16;font-size:12px;font-weight:850
+}
+.sheet{
+  position:relative;margin-top:-34px;background:linear-gradient(#f8f8f9,#f2f3f4);
+  border-radius:35px 35px 0 0;min-height:700px;padding:18px 24px 115px;z-index:3;
+  box-shadow:0 -6px 20px #00000008
+}
+.title{font-size:29px;line-height:1.1;margin:0 0 10px;font-weight:900;letter-spacing:-1.2px}
+.subtitle{font-size:14px;color:var(--muted);margin:0 0 25px;line-height:1.45}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tile{
+  height:162px;border:1px solid #fff;background:linear-gradient(145deg,#fff,#f8f8f9);
+  border-radius:25px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 10px 25px #252a310b;transition:.16s
+}
+.tile:active,.cat:active,.navitem:active{transform:scale(.96)}
+.ico{
+  width:67px;height:67px;border-radius:22px;background:#fff;display:grid;place-items:center;
+  color:var(--red);font-size:25px;box-shadow:0 8px 20px #0000000a;margin-bottom:12px
+}
+.tile b{font-size:14px}
+.section{margin-top:39px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-head h2{margin:0;font-size:23px;letter-spacing:-.5px}
+.link{border:0;background:transparent;color:var(--red);font-size:14px;font-weight:800}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cat{
+  min-height:168px;padding:19px;border:1px solid #fff;border-radius:23px;
+  background:linear-gradient(145deg,#fff,#fafafa);box-shadow:0 10px 24px #2228310c;
+  position:relative;transition:.16s
+}
+.cat .code{color:var(--red);font-size:15px;font-weight:900}
+.cat .count{
+  position:absolute;right:12px;top:12px;background:#f7f7f8;border-radius:20px;
+  padding:6px 9px;font-size:12px;font-weight:800
+}
+.cat h3{font-size:20px;margin:11px 0 13px;letter-spacing:-.4px}
+.cat p{font-size:12px;line-height:1.65;color:#777b82;margin:0}
+.status{
+  margin-top:15px;background:#fff;border-radius:22px;padding:17px;
+  box-shadow:0 10px 24px #2228310b
+}
+.status-row{display:flex;justify-content:space-between;font-size:13px;margin:7px 0}
+.status-row span{color:var(--muted)}
+.bar{height:8px;background:#ececef;border-radius:10px;overflow:hidden;display:flex;margin:11px 0}
+.bar i:nth-child(1){width:75%;background:#35a36a}.bar i:nth-child(2){width:17%;background:#e6a23c}.bar i:nth-child(3){width:8%;background:#d4d5d8}
+.bottom{
+  position:fixed;left:50%;bottom:10px;transform:translateX(-50%);
+  width:min(410px,calc(100% - 28px));height:91px;background:#36393d;color:#fff;
+  border-radius:27px;display:grid;grid-template-columns:repeat(5,1fr);
+  align-items:end;padding:10px 6px 11px;z-index:20;
+  box-shadow:0 15px 35px #0003
+}
+.navitem{
+  border:0;background:transparent;color:#e5e6e8;text-align:center;font-size:11px;
+  height:62px;border-radius:17px;padding:5px 0
+}
+.navitem .nicon{height:29px;font-size:23px;display:grid;place-items:center}
+.navitem.active{color:#fff}.navitem.active .nicon{color:var(--red)}
+.scanwrap{position:relative}
+.scan{
+  width:76px;height:76px;border-radius:50%;margin:-39px auto 0;
+  border:6px solid #303337;background:var(--red);display:grid;place-items:center;
+  font-size:29px;box-shadow:0 8px 22px #0004
+}
+.scanwrap span{display:block;margin-top:6px}
+
+.page{display:none;animation:fade .18s ease}.page.active{display:block}
+@keyframes fade{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.page-head h2{margin:3px 0 5px;font-size:29px;letter-spacing:-1px}.page-head p{margin:0;color:var(--muted);font-size:13px}
+.head-btn{border:0;background:#fff;width:45px;height:45px;border-radius:14px;color:var(--red);font-size:20px;box-shadow:0 8px 20px #0000000b}
+.section-code{display:inline-block;color:var(--red);font-weight:900;font-size:13px}
+.page-count{background:#fff;border-radius:22px;padding:8px 12px;font-weight:900}
+.summary-grid,.report-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px}
+.summary-grid div,.report-grid div{background:#fff;border-radius:17px;padding:13px;text-align:center;box-shadow:0 8px 20px #00000009}
+.summary-grid b,.report-grid b{display:block;font-size:20px}.summary-grid span,.report-grid span{font-size:10px;color:var(--muted)}
+.filter-row{display:flex;gap:7px;overflow:auto;margin-bottom:14px}.filter{border:1px solid #e5e5e6;background:#fff;padding:8px 13px;border-radius:20px;font-size:11px;color:#666}.filter.active{background:var(--red);color:#fff;border-color:var(--red)}
+.record-list{display:grid;gap:9px}.record{background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 7px 18px #00000008}.record-icon{width:38px;height:38px;border-radius:12px;background:#fff0f1;color:var(--red);display:grid;place-items:center;font-weight:900}.record-main{flex:1}.record-main b{font-size:12px;display:block}.record-main small{font-size:10px;color:var(--muted);display:block;margin-top:3px}.record-status{font-size:9px;padding:5px 8px;border-radius:20px;background:#e8f6ed;color:#34895a}.record-status.process{background:#fff0dc;color:#ad732d}.record-status.expired{background:#eeeeef;color:#73757a}
+.subcards{display:grid;gap:12px}.subcards button{border:0;background:#fff;border-radius:20px;padding:17px;text-align:left;box-shadow:0 8px 20px #00000009;display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:4px 10px}.subcards b{color:var(--red);font-size:12px}.subcards strong{font-size:13px}.subcards span{grid-column:2;color:var(--muted);font-size:10px}.big-search{background:#fff;border-radius:18px;padding:5px 14px;display:flex;align-items:center;gap:8px;margin-bottom:14px;box-shadow:0 8px 20px #00000009}.big-search span{font-size:21px;color:var(--red)}.big-search input{border:0;outline:0;width:100%;padding:11px;background:transparent;font-size:13px}
+.report-total{background:linear-gradient(145deg,#d9000b,#f0202b);color:#fff;border-radius:23px;padding:22px;margin-bottom:14px;box-shadow:0 12px 25px #d9000b22}.report-total span,.report-total small{display:block;opacity:.85;font-size:11px}.report-total b{display:block;font-size:39px;margin:5px 0}.report-grid{grid-template-columns:repeat(3,1fr);margin-top:14px}.full-btn{width:100%;border:0;background:var(--red);color:#fff;padding:14px;border-radius:15px;font-weight:800;margin-top:14px}
+.more-list{display:grid;gap:10px}.more-list button{border:0;background:#fff;border-radius:18px;padding:17px;text-align:left;font-size:20px;color:var(--red);display:flex;align-items:center;gap:13px;box-shadow:0 8px 20px #00000008}.more-list span{color:var(--ink);font-size:13px;flex:1}.more-list b{color:#999}
+.modal{
+  display:none;position:fixed;inset:0;background:#0006;z-index:40;
+  align-items:flex-end;justify-content:center
+}
+.modal.show{display:flex}
+.modalbox{
+  width:min(430px,100%);background:#fff;border-radius:28px 28px 0 0;
+  padding:22px;box-shadow:0 -20px 50px #0003
+}
+.modalhead{display:flex;justify-content:space-between;align-items:center}
+.modalhead h3{margin:0;font-size:21px}.close{border:0;background:#eee;width:34px;height:34px;border-radius:50%}
+.form{display:grid;gap:10px;margin-top:18px}
+.form input,.form select{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;background:#fafafa}
+.save{border:0;background:var(--red);color:#fff;padding:13px;border-radius:12px;font-weight:800}
+.toast{
+ position:fixed;left:50%;bottom:115px;transform:translate(-50%,15px);z-index:60;
+ background:#25272bcc;color:#fff;padding:11px 17px;border-radius:20px;font-size:11px;
+ opacity:0;transition:.2s;backdrop-filter:blur(12px)
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:360px){
+ .header{padding-left:22px;padding-right:22px}.title{font-size:25px}.tile{height:140px}.ico{width:55px;height:55px}
+ .cat{min-height:155px}.cat h3{font-size:17px}
+}
+
+/* ===== AUTH + ROLE MANAGEMENT V8 ===== */
+body.locked{overflow:hidden}
+.login-screen{position:fixed;inset:0;z-index:100;background:linear-gradient(145deg,#b90008,#ed101d 55%,#ff5260);display:flex;align-items:center;justify-content:center;padding:20px}
+.login-screen.hidden{display:none}
+.login-glass{width:min(410px,100%);background:rgba(255,255,255,.94);border-radius:30px;padding:28px;box-shadow:0 30px 90px #68000955}
+.login-brand{text-align:center;margin-bottom:25px}.login-brand .mark{width:66px;height:66px;border-radius:21px;background:#fff0f1;color:var(--red);display:grid;place-items:center;font-weight:900;font-size:18px;margin:auto;box-shadow:0 12px 25px #0000000d}.login-brand h2{margin:13px 0 4px;font-size:24px}.login-brand p{margin:0;color:var(--muted);font-size:12px}
+.login-role{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:15px}.login-role button{border:1px solid #e5e5e7;background:#f7f7f8;padding:10px;border-radius:12px;font-weight:700;color:#777}.login-role button.active{background:var(--red);color:#fff;border-color:var(--red)}
+.login-form{display:grid;gap:11px}.login-form label{font-size:11px;font-weight:800}.login-form input{width:100%;padding:13px;border:1px solid #ddd;border-radius:13px;background:#fafafa;outline:0}.login-btn{border:0;background:var(--red);color:#fff;padding:14px;border-radius:13px;font-weight:850;margin-top:4px}.demo-note{font-size:10px;color:#8a8b90;text-align:center;margin-top:12px;line-height:1.5}
+.app.hidden{display:none}
+.user-pill{display:none;align-items:center;gap:8px;background:#fff;border-radius:22px;padding:5px 9px 5px 5px;box-shadow:0 6px 18px #0000000b;font-size:10px;font-weight:800}.user-avatar{width:30px;height:30px;border-radius:50%;background:#ffe9eb;color:var(--red);display:grid;place-items:center}.logout-btn{border:0;background:transparent;color:var(--red);font-size:11px;font-weight:800}
+.permission-note{background:#fff5f5;border:1px solid #ffd6d8;border-radius:15px;padding:12px;font-size:11px;color:#7c3d42;margin-bottom:14px}.permission-note b{color:var(--red)}
+.admin-panel{background:#fff;border-radius:22px;padding:16px;box-shadow:0 8px 20px #00000009;margin-bottom:12px}.admin-panel h3{margin:0 0 4px;font-size:16px}.admin-panel p{margin:0 0 12px;color:var(--muted);font-size:11px}
+.admin-add{border:0;background:var(--red);color:#fff;border-radius:11px;padding:9px 12px;font-size:11px;font-weight:800}
+.admin-table{width:100%;border-collapse:collapse;font-size:10px}.admin-table th,.admin-table td{padding:9px 6px;border-bottom:1px solid #eee;text-align:left}.admin-table th{color:#999}.access-tags{display:flex;gap:4px;flex-wrap:wrap}.access-tag{padding:4px 6px;border-radius:9px;background:#f0efff;color:#6751a7;font-size:8px;font-weight:800}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{background:#f7f7f8;border-radius:12px;padding:9px;font-size:10px}.check input{accent-color:var(--red)}
+.modal-lite{display:none;position:fixed;inset:0;background:#0006;z-index:90;align-items:flex-end;justify-content:center}.modal-lite.show{display:flex}.modal-lite-box{width:min(430px,100%);background:#fff;border-radius:28px 28px 0 0;padding:22px}.modal-lite-box h3{margin:0 0 15px}.modal-lite-form{display:grid;gap:10px}.modal-lite-form input{padding:12px;border:1px solid #ddd;border-radius:12px}.modal-lite-actions{display:flex;gap:8px;margin-top:15px}.modal-lite-actions button{flex:1;border:0;padding:12px;border-radius:12px;font-weight:800}.cancel{background:#eee}.confirm{background:var(--red);color:#fff}
+
+
+.login-access{
+  margin-top:14px;width:100%;max-width:305px;border:1px solid #ffffff66;
+  background:rgba(255,255,255,.16);color:#fff;border-radius:17px;padding:11px 13px;
+  display:flex;align-items:center;text-align:left;gap:10px;box-shadow:0 8px 20px #79000922;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)
+}
+.login-access:active{transform:scale(.97)}
+.login-access-icon{
+  width:35px;height:35px;border-radius:11px;background:#fff;color:var(--red);
+  display:grid;place-items:center;font-size:18px
+}
+.login-access span:nth-child(2){flex:1}.login-access b{display:block;font-size:11px;letter-spacing:.3px}.login-access small{display:block;font-size:9px;opacity:.78;margin-top:2px}.login-arrow{font-size:22px;opacity:.85}
+@media(max-width:390px){.login-access{max-width:270px}}
+
+
+.login-more-btn{border:1px solid #ffd2d5!important;background:#fff5f6!important}
+.login-more-btn:first-letter{color:var(--red)}
+
+
+.login-more-btn{display:flex!important;align-items:center!important;gap:12px!important;background:#fff5f6!important;border:1px solid #ffd2d5!important}
+.login-more-btn span{display:block!important;text-align:left}.login-more-btn span strong{display:block;font-size:12px;color:var(--red)}.login-more-btn span small{display:block;font-size:9px;color:var(--muted);margin-top:2px}.login-more-btn>b{margin-left:auto}
+.account-panel{background:#fff;border-radius:18px;padding:12px;display:flex;align-items:center;gap:10px;margin-bottom:10px;box-shadow:0 8px 20px #00000008}
+.account-avatar{width:38px;height:38px;border-radius:12px;background:#ffe8ea;color:var(--red);display:grid;place-items:center;font-weight:900}
+.account-panel>div:nth-child(2){flex:1}.account-panel b{display:block;font-size:11px}.account-panel small{display:block;color:var(--muted);font-size:8px;margin-top:2px}.account-panel button{border:0;background:#eee;color:#555;border-radius:9px;padding:7px;font-size:9px}
+
+
+.login-cancel{
+  width:100%;border:0;background:#f0f0f2;color:#555;padding:12px;border-radius:13px;
+  font-weight:700;margin-top:8px
+}
+
+
+.login-screen{
+ position:fixed!important;inset:0!important;z-index:9999!important;
+ background:rgba(20,20,25,.58)!important;display:flex!important;
+ align-items:flex-end!important;justify-content:center!important;
+ padding:0!important;
+}
+.login-screen.hidden{display:none!important}
+.login-glass{
+ width:min(430px,100%)!important;background:#fff!important;
+ border-radius:30px 30px 0 0!important;padding:25px!important;
+ box-shadow:0 -20px 70px #0005!important;
+ max-height:90vh;overflow:auto
+}
+.login-brand{text-align:center;margin-bottom:20px}.login-brand .mark{
+ width:60px;height:60px;border-radius:19px;background:#fff0f1;color:var(--red);
+ display:grid;place-items:center;font-weight:900;font-size:17px;margin:auto
+}.login-brand h2{margin:11px 0 4px;font-size:21px}.login-brand p{margin:0;color:var(--muted);font-size:11px}
+.login-role{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-bottom:14px}
+.login-role button{border:1px solid #e3e3e5!important;background:#f6f6f7!important;color:#777!important;padding:11px!important;border-radius:12px!important;font-weight:800!important}
+.login-role button.active{background:var(--red)!important;color:#fff!important;border-color:var(--red)!important}
+.login-form{display:grid!important;gap:9px!important}.login-form label{font-size:11px;font-weight:800}
+.login-form input{width:100%!important;padding:13px!important;border:1px solid #ddd!important;border-radius:12px!important;background:#fafafa!important;outline:0}
+.login-btn{width:100%;border:0;background:var(--red);color:#fff;padding:13px;border-radius:12px;font-weight:900;margin-top:3px}
+.login-cancel{width:100%;border:0;background:#eee;color:#555;padding:12px;border-radius:12px;font-weight:700;margin-top:8px}
+.demo-note{text-align:center;font-size:9px;color:#888;margin-top:11px;line-height:1.55}
+
+
+.login-screen{
+  position:fixed!important;inset:0!important;z-index:99999!important;
+  background:rgba(20,20,25,.58)!important;display:flex!important;
+  align-items:flex-end!important;justify-content:center!important;padding:0!important
+}
+.login-screen.hidden{display:none!important}
+.login-glass{
+  width:min(430px,100%)!important;background:#fff!important;
+  border-radius:30px 30px 0 0!important;padding:25px!important;
+  box-shadow:0 25px 80px rgba(0,0,0,.35)!important
+}
+.login-brand{text-align:center;margin-bottom:20px}
+.login-brand .mark{width:60px;height:60px;border-radius:19px;background:#fff0f1;color:var(--red);display:grid;place-items:center;font-weight:900;font-size:17px;margin:auto}
+.login-brand h2{margin:11px 0 4px;font-size:21px}
+.login-brand p{margin:0;color:var(--muted);font-size:11px}
+.login-role{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-bottom:14px}
+.login-role button{border:1px solid #e3e3e5!important;background:#f6f6f7!important;color:#777!important;padding:11px!important;border-radius:12px!important;font-weight:800!important}
+.login-role button.active{background:var(--red)!important;color:#fff!important;border-color:var(--red)!important}
+.login-form{display:grid!important;gap:9px!important}
+.login-form label{font-size:11px;font-weight:800}
+.login-form input{width:100%!important;padding:13px!important;border:1px solid #ddd!important;border-radius:12px!important;background:#fafafa!important;outline:0}
+.login-btn{width:100%!important;border:0!important;background:var(--red)!important;color:#fff!important;padding:13px!important;border-radius:12px!important;font-weight:900!important}
+.login-cancel{width:100%!important;border:0!important;background:#eee!important;color:#555!important;padding:12px!important;border-radius:12px!important;font-weight:700!important;margin-top:8px}
+.demo-note{text-align:center;font-size:9px;color:#888;margin-top:11px;line-height:1.55}
+
+
+/* ===== V16 ROLE-BASED RESPONSIVE ===== */
+.desktop-admin-only{display:none}
+.admin-desktop-nav{display:none}
+
+@media (min-width: 900px){
+  body.admin-mode{
+    background:#f4f5f7;
+    overflow-x:hidden;
+  }
+  body .phone{
+    width:100%;
+    max-width:none;
+    min-height:100vh;
+    margin:0;
+    background:#f4f5f7;
+    box-shadow:none;
+    border-radius:0;
+    overflow:visible;
+  }
+  body .hero{
+    min-height:245px;
+    padding:32px 42px 100px;
+    border-radius:0 0 34px 34px;
+  }
+  body .hero-inner{
+    max-width:1280px;
+    margin:auto;
+  }
+  body .sheet{
+    max-width:1280px;
+    margin:-70px auto 30px;
+    border-radius:30px;
+    padding:30px;
+    min-height:650px;
+  }
+  body .bottom{
+    display:none;
+  }
+  body.admin-mode .desktop-admin-only{
+    display:block;
+  }
+  body .admin-layout{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:25px;
+    align-items:start;
+  }
+  body .admin-desktop-nav{
+    display:flex;
+    position:sticky;
+    top:20px;
+    flex-direction:column;
+    gap:7px;
+    background:#fff;
+    border-radius:22px;
+    padding:12px;
+    box-shadow:0 10px 30px #0000000b;
+  }
+  body .admin-desktop-nav button{
+    border:0;
+    background:transparent;
+    text-align:left;
+    padding:13px 14px;
+    border-radius:13px;
+    color:#666;
+    font-weight:700;
+    cursor:pointer;
+  }
+  body .admin-desktop-nav button.active{
+    background:#fff0f1;
+    color:var(--red);
+  }
+  body .admin-content{
+    min-width:0;
+  }
+  body .quick{
+    grid-template-columns:repeat(4,1fr);
+  }
+  body .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+  body .subcards{
+    grid-template-columns:repeat(2,1fr);
+  }
+  body .summary-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+  body .record-list{
+    grid-template-columns:repeat(2,1fr);
+  }
+  body .admin-panel{
+    padding:22px;
+  }
+  body .admin-table{
+    font-size:12px;
+  }
+  body .page-head h2{
+    font-size:32px;
+  }
+}
+
+/* Admin desktop top utility */
+.admin-desktop-top{
+  display:none;
+}
+@media (min-width:640px){
+  body.admin-mode .admin-desktop-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    max-width:1280px;
+    margin:0 auto;
+    padding:18px 30px 0;
+  }
+  body.admin-mode .admin-desktop-top .admin-brand{
+    font-size:18px;
+    font-weight:900;
+    color:#fff;
+  }
+  body.admin-mode .admin-desktop-top .admin-role{
+    background:#ffffff22;
+    border:1px solid #ffffff55;
+    color:#fff;
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:800;
+  }
+}
+
+/* Keep supervisor mobile-first even on large screens */
+body.supervisor-mode .phone{
+  width:100%;
+  max-width:600px;
+}
+
+
+@media (min-width:640px){
+  .login-screen{align-items:center!important;padding:24px!important}
+  .login-glass{width:430px!important;border-radius:28px!important}
+}
+
+
+/* =========================================================
+   V20 — REAL RESPONSIVE DESKTOP UI
+   Mobile keeps the existing iOS-style shell.
+   Desktop becomes a proper web dashboard for both roles.
+   ========================================================= */
+.desktop-auth{display:none;align-items:center;gap:8px;margin-left:8px}
+.desktop-user{font-size:9px;font-weight:900;color:#fff;background:#ffffff22;border:1px solid #ffffff55;border-radius:20px;padding:8px 10px;white-space:nowrap}
+.desktop-login,.desktop-logout{border:0;border-radius:12px;padding:9px 13px;font-size:10px;font-weight:900;cursor:pointer}
+.desktop-login{background:#fff;color:var(--red)}
+.desktop-logout{background:#ffffff22;color:#fff;border:1px solid #ffffff55}
+
+.desktop-page-head{
+  display:none;
+}
+.desktop-stat-strip{display:none}
+
+@media (min-width:768px){
+  body{
+    background:
+      radial-gradient(circle at 10% 0%,#ffe8ea 0,transparent 28%),
+      linear-gradient(135deg,#f4f5f7,#eef0f3);
+  }
+  body .phone{
+    width:100%!important;
+    max-width:none!important;
+    min-height:100vh!important;
+    margin:0!important;
+    overflow:visible!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    border-radius:0!important;
+  }
+  body .header{
+    height:250px!important;
+    padding:22px 38px 0!important;
+    border-radius:0 0 36px 36px!important;
+    box-shadow:0 18px 45px #8d000d22!important;
+  }
+  body .header .top,
+  body .header .greeting{
+    max-width:1420px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  body .header .top{
+    align-items:center!important;
+  }
+  body .header .greeting{
+    margin-top:42px!important;
+  }
+  body .header .greeting h1{
+    font-size:38px!important;
+    margin:7px 0 12px!important;
+  }
+  body .header .greeting small{font-size:16px!important}
+  body .header .role{font-size:10px!important;padding:9px 14px!important}
+
+  body .desktop-auth{display:flex!important}
+  body .desktop-admin-top{display:none!important}
+
+  body .sheet{
+    width:calc(100% - 60px)!important;
+    max-width:1420px!important;
+    margin:-62px auto 42px!important;
+    padding:28px!important;
+    border-radius:32px!important;
+    background:rgba(255,255,255,.93)!important;
+    box-shadow:0 25px 70px #00000012!important;
+    min-height:680px!important;
+  }
+
+  body .admin-layout{
+    display:grid!important;
+    grid-template-columns:245px minmax(0,1fr)!important;
+    gap:28px!important;
+    align-items:start!important;
+  }
+
+  body .admin-desktop-nav{
+    display:flex!important;
+    position:sticky!important;
+    top:22px!important;
+    height:fit-content!important;
+    padding:12px!important;
+    border-radius:24px!important;
+    background:linear-gradient(180deg,#fff,#fafafa)!important;
+    box-shadow:0 15px 40px #0000000b!important;
+    border:1px solid #eee!important;
+  }
+  body .admin-desktop-nav button{
+    padding:13px 15px!important;
+    border-radius:14px!important;
+    font-size:12px!important;
+    transition:.15s!important;
+  }
+  body .admin-desktop-nav button:hover{background:#f6f6f7!important;color:var(--red)!important}
+  body .admin-desktop-nav button.active{background:#fff0f1!important;color:var(--red)!important}
+
+  body .admin-content{min-width:0!important}
+  body .desktop-admin-only{display:block!important}
+  body .desktop-admin-only .permission-note{
+    background:linear-gradient(90deg,#fff5f5,#fff)!important;
+    border-color:#ffd2d5!important;
+  }
+
+  body .page-head h2{font-size:34px!important}
+  body .title{font-size:34px!important}
+  body .subtitle{font-size:14px!important}
+
+  body .quick{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}
+  body .tile{min-height:145px!important}
+  body .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+  body .cat{min-height:160px!important}
+  body .subcards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+  body .record-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+  body .summary-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  body .report-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+
+  /* desktop-only dashboard rhythm */
+  body .section{margin-top:28px!important}
+  body .section-head h2{font-size:22px!important}
+  body .admin-panel{border:1px solid #eee!important;box-shadow:0 10px 30px #00000008!important}
+
+  /* no mobile bottom navigation on desktop */
+  body .bottom{display:none!important}
+
+  /* desktop More becomes a real settings/account page */
+  body #page-more .more-list{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    display:grid!important;
+    gap:14px!important;
+  }
+  body #page-more .more-list button{
+    min-height:82px!important;
+    font-size:22px!important;
+  }
+  body #page-more .account-panel{
+    border:1px solid #eee!important;
+    min-height:80px!important;
+  }
+
+  /* Admin view switch is a desktop setting, not a mobile card */
+  body .admin-view-panel{
+    padding:18px!important;
+    border-radius:20px!important;
+    box-shadow:none!important;
+  }
+
+  /* login becomes a centered desktop dialog */
+  body .login-screen{
+    align-items:center!important;
+    padding:25px!important;
+  }
+  body .login-glass{
+    width:460px!important;
+    border-radius:30px!important;
+    box-shadow:0 30px 90px #0006!important;
+  }
+
+  /* wider table */
+  body .admin-panel{overflow:auto}
+  body .admin-table{min-width:850px}
+}
+
+@media (min-width:1180px){
+  body .sheet{width:calc(100% - 90px)!important}
+  body .admin-layout{grid-template-columns:270px minmax(0,1fr)!important}
+  body .record-list{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  body .subcards{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+
+@media (min-width:768px){
+  body.supervisor-mode .admin-desktop-nav [data-admin-page="pengguna"]{display:none!important}
+  body.supervisor-mode .admin-desktop-only .permission-note b:before{content:"PENYELIA VIEW ONLY: ";font-weight:900}
+  body.supervisor-mode .admin-desktop-only .permission-note b{font-size:0}
+  body.supervisor-mode .admin-desktop-only .permission-note b:before{font-size:11px}
+  body.supervisor-mode .admin-view-panel{display:none!important}
+}
+
+
+/* ===== V21 CLEAN RESPONSIVE WEBAPP ===== */
+@media (min-width:768px){
+  body{
+    background:linear-gradient(135deg,#f3f4f6,#eceff2)!important;
+  }
+  body .phone{
+    width:100%!important;max-width:none!important;min-height:100vh!important;
+    margin:0!important;background:transparent!important;box-shadow:none!important;
+    border-radius:0!important;overflow:visible!important;
+  }
+  body .header{
+    min-height:270px!important;height:auto!important;
+    padding:28px 48px 105px!important;
+    border-radius:0 0 38px 38px!important;
+  }
+  body .header .top,
+  body .header .greeting{
+    max-width:1400px!important;margin-left:auto!important;margin-right:auto!important;
+  }
+  body .header .greeting{
+    margin-top:38px!important;
+  }
+  body .header .greeting small{
+    display:block!important;font-size:16px!important;line-height:1.2!important;
+    margin-bottom:6px!important;
+  }
+  body .header .greeting h1{
+    display:block!important;position:static!important;
+    font-size:42px!important;line-height:1.08!important;
+    margin:0 0 15px!important;max-width:none!important;
+  }
+  body .header .role{display:inline-flex!important;position:static!important}
+  body .sheet{
+    width:calc(100% - 80px)!important;max-width:1400px!important;
+    margin:-70px auto 40px!important;padding:30px!important;
+    border-radius:32px!important;background:rgba(255,255,255,.96)!important;
+    box-shadow:0 25px 70px #00000014!important;
+  }
+  body .admin-layout{
+    display:grid!important;grid-template-columns:250px minmax(0,1fr)!important;
+    gap:28px!important;align-items:start!important;
+  }
+  body .admin-desktop-nav{
+    display:flex!important;position:sticky!important;top:20px!important;
+    flex-direction:column!important;height:max-content!important;
+    border-radius:24px!important;padding:12px!important;
+    background:#fff!important;border:1px solid #eee!important;
+    box-shadow:0 12px 35px #0000000b!important;
+  }
+  body .admin-desktop-nav button{
+    text-align:left!important;padding:14px!important;border-radius:13px!important;
+  }
+  body .admin-content{min-width:0!important}
+  body .bottom{display:none!important}
+  body .quick{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  body .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body .subcards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body .record-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body .summary-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  body .admin-table{min-width:800px!important}
+  body .admin-panel{overflow:auto!important}
+  body #page-more .more-list{
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;
+  }
+  body #page-more .more-list button{min-height:80px!important}
+  body .desktop-auth{display:flex!important}
+  body .desktop-admin-top{display:none!important}
+}
+
+@media (min-width:1150px){
+  body .sheet{width:calc(100% - 120px)!important}
+  body .admin-layout{grid-template-columns:270px minmax(0,1fr)!important}
+  body .record-list{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  body .subcards{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+
+@media (max-width:767px){
+  body .desktop-auth{display:none!important}
+  body .admin-desktop-nav{display:none!important}
+}
+
+
+.category-code-reference{
+  background:#fff;border:1px solid #eee;border-radius:20px;padding:15px;margin-bottom:14px;
+  box-shadow:0 8px 25px #00000008
+}
+.code-ref-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.code-ref-head b{display:block;font-size:13px}.code-ref-head small{display:block;color:#777;font-size:9px;margin-top:2px}
+.code-ref-head span{font-size:8px;font-weight:900;color:var(--red);background:#fff0f1;padding:6px 8px;border-radius:9px}
+.code-ref-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.code-ref-grid>div{background:#f8f8f9;border-radius:12px;padding:10px}
+.code-ref-grid b{color:var(--red);font-size:12px}.code-ref-grid span{display:block;font-size:10px;font-weight:800;margin-top:2px}.code-ref-grid small{display:block;color:#777;font-size:8px;margin-top:4px}
+@media(max-width:767px){.code-ref-grid{grid-template-columns:1fr}.category-code-reference{margin-top:8px}}
+
+
+.official-code-note{
+  display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 14px;
+  padding:10px 12px;background:#fff8f8;border:1px solid #ffd2d5;
+  border-radius:13px;font-size:9px;color:#555;
+}
+.official-code-note b{color:#ef0b1a;font-size:9px;width:100%}
+.official-code-note span{background:#fff;border:1px solid #eee;border-radius:9px;padding:6px 8px}
+
+
+.home-code-standard{
+  color:#6d7580!important;
+  font-size:11px!important;
+  line-height:1.8!important;
+}
+.home-code-standard b{color:#111!important}
+
+
+/* ===== V25 — CATEGORY TABS CONSISTENT UI ===== */
+.page .official-code-note{
+  margin:0 0 18px!important;
+}
+.page .subcards{
+  margin-top:0!important;
+}
+.page .subcards button{
+  min-height:82px!important;
+}
+.page .subcards button b{
+  min-width:72px!important;
+}
+@media (min-width:768px){
+  .page .official-code-note{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:wrap!important;
+    gap:8px!important;
+    padding:13px 15px!important;
+    border-radius:16px!important;
+  }
+  .page .official-code-note>b{
+    width:auto!important;
+    margin-right:4px!important;
+  }
+  .page .subcards{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:16px!important;
+  }
+  .page .subcards button{
+    min-height:112px!important;
+    padding:18px!important;
+    display:grid!important;
+    grid-template-columns:92px 1fr!important;
+    grid-template-rows:auto auto!important;
+    align-items:center!important;
+    text-align:left!important;
+  }
+  .page .subcards button b{
+    grid-row:1 / span 2!important;
+    min-width:0!important;
+    font-size:14px!important;
+  }
+  .page .subcards button strong{
+    font-size:16px!important;
+    align-self:end!important;
+  }
+  .page .subcards button span{
+    align-self:start!important;
+    margin-top:3px!important;
+  }
+}
+@media (max-width:767px){
+  .page .subcards button{
+    min-height:86px!important;
+  }
+}
+
+
+/* ===== V26 — HOME CATEGORY CODE BADGES ===== */
+.cat-code{
+  min-width:34px!important;
+  text-align:center!important;
+  letter-spacing:.2px!important;
+}
+
+
+/* ===== V27 — AUTHENTICATION REQUIRED ===== */
+#authGate{
+  position:fixed;inset:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  background:linear-gradient(135deg,#d90012 0%,#f5162a 55%,#b90010 100%);
+}
+#authGate .gate-card{
+  width:min(440px,100%);
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:28px;
+  padding:30px;
+  box-shadow:0 30px 90px rgba(0,0,0,.25);
+  text-align:center;
+}
+#authGate .gate-logo{
+  width:64px;height:64px;border-radius:20px;margin:0 auto 16px;
+  display:grid;place-items:center;background:#fff0f1;color:#ef1020;
+  font-size:24px;font-weight:900;
+}
+#authGate h2{margin:0;color:#17191d;font-size:25px}
+#authGate p{margin:8px 0 22px;color:#727780;font-size:13px}
+#authGate .gate-btn{
+  width:100%;border:0;border-radius:15px;padding:14px;
+  background:#ef1020;color:#fff;font-weight:900;font-size:13px;cursor:pointer;
+}
+#authGate .gate-note{margin-top:14px;color:#8a8f96;font-size:10px}
+body.auth-locked .phone{visibility:hidden}
+body.auth-locked .bottom{display:none!important}
+
+
+.sync-btn{
+  float:right;border:1px solid #ffd0d3;background:#fff;color:#ef1020;
+  border-radius:10px;padding:7px 11px;font-size:10px;font-weight:900;cursor:pointer;
+}
+.sync-btn:hover{background:#fff0f1}
+.sync-more{
+  width:100%;border:0;text-align:left;background:#fff;border-radius:16px;
+  padding:16px 18px;margin-bottom:10px;color:#ef1020;font-weight:800;
+  box-shadow:0 8px 22px rgba(0,0,0,.05);cursor:pointer;
+}
+.sync-more span{float:right;color:#999}
+
+</style>
+</head>
+<body class="auth-locked">
+
+<div id="authGate">
+  <div class="gate-card">
+    <div class="gate-logo">JL</div>
+    <h2>SISTEM OPERASI<br>JABATAN LESEN</h2>
+    <p>Sila log masuk terlebih dahulu untuk mengakses dashboard dan maklumat lesen.</p>
+    <button class="gate-btn" type="button" onclick="openLogin()">LOG MASUK</button>
+    <div class="gate-note">Akses: Admin / Penyelia</div>
+  </div>
+</div>
+
+
+<div class="login-screen hidden" id="loginScreen" aria-hidden="true">
+  <div class="login-glass" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="login-brand">
+      <div class="mark">JL</div>
+      <h2 id="loginTitle">SISTEM OPERASI<br>JABATAN LESEN</h2>
+      <p>Log masuk untuk mengakses dashboard</p>
+    </div>
+
+    <div class="login-role">
+      <button id="adminRoleBtn" class="active" type="button" onclick="selectLoginRole('ADMIN')">ADMIN</button>
+      <button id="supervisorRoleBtn" type="button" onclick="selectLoginRole('PENYELIA')">PENYELIA</button>
+    </div>
+
+    <form class="login-form" onsubmit="login(event)">
+      <label for="loginUser">Nama Pengguna</label>
+      <input id="loginUser" required autocomplete="username" placeholder="Masukkan username">
+
+      <label for="loginPass">Kata Laluan</label>
+      <input id="loginPass" required type="password" autocomplete="current-password" placeholder="Masukkan kata laluan">
+
+      <button class="login-btn" type="submit">LOG MASUK</button>
+    </form>
+
+    <button class="login-cancel" type="button" onclick="closeLogin()">Batal</button>
+
+    <div class="demo-note">
+      Admin demo: <b>admin / admin123</b><br>
+      Penyelia demo: <b>penyelia / 123456</b>
+    </div>
+  </div>
+</div>
+
+
+<div class="admin-desktop-top">
+  <div class="admin-brand">JABATAN LESEN</div>
+  <div class="admin-role">ADMIN • DESKTOP CONTROL</div>
+</div>
+<div class="phone">
+<header class="header">
+  <div class="top">
+    <div class="logo">JABATAN LESEN</div>
+    <div class="top-actions">
+      <button class="circle" onclick="openSearch()" aria-label="Carian">⌕</button>
+      <button class="circle" onclick="showToast('Tiada notifikasi baharu')" aria-label="Notifikasi">♢</button>
+      <div class="desktop-auth" id="desktopAuth">
+        <span class="desktop-user" id="desktopUser">GUEST • VIEW</span>
+        <button class="desktop-login" id="desktopLoginBtn" type="button" onclick="openLogin()">LOG MASUK</button>
+        <button class="desktop-logout" id="desktopLogoutBtn" type="button" onclick="logout()" style="display:none">LOG KELUAR</button>
+      </div>
+    </div>
+  </div>
+  <div class="greeting">
+    <small>Selamat datang,</small>
+    <h1>Pegawai Penyelia</h1>
+    <span class="role">PENYELIA • VIEW ONLY</span>
+  </div>
+</header>
+
+<main class="sheet">
+<div class="admin-layout">
+  <aside class="admin-desktop-nav">
+    <button data-admin-page="home" onclick="goPage('home')">⌂ &nbsp; Dashboard</button>
+    <button data-admin-page="lesen" onclick="goPage('lesen')">▤ &nbsp; Semua Lesen</button>
+    <button data-admin-page="iklan" onclick="goPage('iklan')">▣ &nbsp; Iklan</button>
+    <button data-admin-page="liquor" onclick="goPage('liquor')">♜ &nbsp; Liquor</button>
+    <button data-admin-page="siarkaki" onclick="goPage('siarkaki')">☷ &nbsp; Siar Kaki</button>
+    <button data-admin-page="laporan" onclick="goPage('laporan')">▥ &nbsp; Laporan</button>
+    <button data-admin-page="pengguna" onclick="goPage('pengguna')">♙ &nbsp; Pengurusan Pengguna</button>
+    <button data-admin-page="more" onclick="goPage('more')">☷ &nbsp; More / Tetapan</button>
+  </aside>
+  <div class="admin-content">
+    <div class="desktop-admin-only" style="margin-bottom:18px">
+      <div class="permission-note"><b>RESPONSIVE DESKTOP:</b> Paparan web untuk operasi Jabatan Lesen.
+<button class="sync-btn" onclick="syncGoogleSheets()">↻ SYNC DATA</button></div>
+    </div>
+    <div id="pageContainer">
+
+
+<section class="page active" id="page-home">
+  <h2 class="title">Apa yang anda mahu semak?</h2>
+  <p class="subtitle">Pantau keseluruhan operasi perlesenan dari satu dashboard.</p>
+
+  <div class="quick">
+    <button class="tile" onclick="goPage('iklan')"><div class="ico">▣</div><b>Iklan</b></button>
+    <button class="tile" onclick="goPage('liquor')"><div class="ico">♜</div><b>Liquor</b></button>
+    <button class="tile" onclick="goPage('siarkaki')"><div class="ico">☷</div><b>Siar Kaki</b></button>
+    <button class="tile" onclick="goPage('laporan')"><div class="ico">▥</div><b>Statistik</b></button>
+  </div>
+
+  <section class="section">
+    <div class="section-head"><h2>Kategori Lesen</h2><button class="link" onclick="goPage('lesen')">Lihat semua</button></div>
+    <div class="cards">
+      <button class="cat" onclick="goPage('iklan')"><span class="code">IKL</span><span class="count" id="homeCountIKL">0</span><h3>IKLAN</h3><p>IKL-01 Papan Tanda<br>IKL-02 Bunting<br>IKL-03 Kain Rentang</p></button>
+      <button class="cat" onclick="goPage('liquor')"><span class="code">LIQ</span><span class="count" id="homeCountLIQ">0</span><h3>LIQUOR</h3><p>LIQ-01 Rumah Awam<br>LIQ-02 Rumah Bir<br>LIQ-03 Lesen Borong<br>LIQ-04 Lesen Runcit</p></button>
+      <button class="cat" onclick="goPage('siarkaki')"><span class="code">SK</span><span class="count" id="homeCountSK">0</span><h3>SIAR KAKI</h3><p>SK-01 Meja &amp; Kerusi<br>SK-02 Promosi Barang Jualan<br>SK-03 Jualan Musim Perayaan<br>SK-04 Renovasi</p></button>
+      <button class="cat" onclick="goPage('lesen')"><span class="code">Σ</span><span class="count" id="homeCountALL">0</span><h3>SEMUA REKOD</h3><p>Jumlah keseluruhan rekod<br>mengikut status.</p></button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>Status Operasi</h2><button class="link" onclick="goPage('laporan')">Butiran</button></div>
+    <div class="status">
+      <div class="status-row"><span>Aktif</span><b>96 • 75%</b></div>
+      <div class="status-row"><span>Dalam Proses</span><b>22 • 17%</b></div>
+      <div class="status-row"><span>Tamat</span><b>10 • 8%</b></div>
+      <div class="bar"><i></i><i></i><i></i></div>
+    </div>
+  </section>
+</section>
+
+<section class="page" id="page-lesen">
+  <div class="page-head"><div><h2>Semua Lesen</h2><p>Keseluruhan rekod perlesenan.</p></div><button class="head-btn" onclick="openSearch()">⌕</button></div>
+  <div class="summary-grid">
+    <div><b>128</b><span>Jumlah</span></div><div><b>96</b><span>Aktif</span></div><div><b>22</b><span>Proses</span></div><div><b>10</b><span>Tamat</span></div>
+  </div>
+  <div class="filter-row"><button class="filter active" onclick="filterRecords(this,'Semua')">Semua</button><button class="filter" onclick="filterRecords(this,'Aktif')">Aktif</button><button class="filter" onclick="filterRecords(this,'Proses')">Proses</button><button class="filter" onclick="filterRecords(this,'Tamat')">Tamat</button></div>
+  <div class="record-list" id="recordList"></div>
+</section>
+
+<section class="page" id="page-iklan">
+  <div class="page-head">
+    <div>
+      <span class="section-code">A</span>
+      <h2>Iklan</h2>
+      <p>Pengurusan lesen iklan.</p>
+    </div>
+    <span class="page-count" id="pageCountIKL">0</span>
+  </div>
+
+  <div class="official-code-note">
+    <b>KOD KATEGORI RASMI</b>
+    <span>IKL-01-01 • Bercahaya</span>
+    <span>IKL-01-02 • Tidak Bercahaya</span>
+    <span>IKL-02 • Bunting</span>
+    <span>IKL-03 • Kain Rentang</span>
+  </div>
+
+  <div class="subcards">
+    <button onclick="openSub('IKL-01-01 — Papan Tanda Bercahaya')">
+      <b>IKL-01-01</b><strong>Papan Tanda Bercahaya</strong><span data-live-code="IKL-01-01">18 rekod</span>
+    </button>
+    <button onclick="openSub('IKL-01-02 — Papan Tanda Tidak Bercahaya')">
+      <b>IKL-01-02</b><strong>Papan Tanda Tidak Bercahaya</strong><span data-live-code="IKL-01-02">14 rekod</span>
+    </button>
+    <button onclick="openSub('IKL-02 — Bunting')">
+      <b>IKL-02</b><strong>Bunting</strong><span data-live-code="IKL-02">12 rekod</span>
+    </button>
+    <button onclick="openSub('IKL-03 — Kain Rentang')">
+      <b>IKL-03</b><strong>Kain Rentang</strong><span data-live-code="IKL-03">10 rekod</span>
+    </button>
+  </div>
+</section>
+
+<section class="page" id="page-liquor">
+  <div class="page-head">
+    <div>
+      <span class="section-code">B</span>
+      <h2>Liquor</h2>
+      <p>Pengurusan lesen liquor.</p>
+    </div>
+    <span class="page-count" id="pageCountLIQ">0</span>
+  </div>
+
+  <div class="official-code-note">
+    <b>KOD KATEGORI RASMI</b>
+    <span>LIQ-01 • Rumah Awam</span>
+    <span>LIQ-02 • Rumah Bir</span>
+    <span>LIQ-03 • Lesen Borong</span>
+    <span>LIQ-04 • Lesen Runcit</span>
+  </div>
+
+  <div class="subcards">
+    <button onclick="openSub('LIQ-01 — Rumah Awam')">
+      <b>LIQ-01</b><strong>Rumah Awam</strong><span data-live-code="IKL-03">10 rekod</span>
+    </button>
+    <button onclick="openSub('LIQ-02 — Rumah Bir')">
+      <b>LIQ-02</b><strong>Rumah Bir</strong><span data-live-code="LIQ-02">8 rekod</span>
+    </button>
+    <button onclick="openSub('LIQ-03 — Lesen Borong')">
+      <b>LIQ-03</b><strong>Lesen Borong</strong><span data-live-code="LIQ-03">6 rekod</span>
+    </button>
+    <button onclick="openSub('LIQ-04 — Lesen Runcit')">
+      <b>LIQ-04</b><strong>Lesen Runcit</strong><span data-live-code="LIQ-04">7 rekod</span>
+    </button>
+  </div>
+</section>
+
+<section class="page" id="page-siarkaki">
+  <div class="page-head">
+    <div>
+      <span class="section-code">C</span>
+      <h2>Siar Kaki</h2>
+      <p>Pengurusan lesen siar kaki.</p>
+    </div>
+    <span class="page-count" id="pageCountSK">0</span>
+  </div>
+
+  <div class="official-code-note">
+    <b>KOD KATEGORI RASMI</b>
+    <span>SK-01 • Meja & Kerusi</span>
+    <span>SK-02 • Promosi Barang Jualan</span>
+    <span>SK-03 • Jualan Musim Perayaan</span>
+    <span>SK-04 • Renovasi</span>
+  </div>
+
+  <div class="subcards">
+    <button onclick="openSub('SK-01 — Meja & Kerusi')">
+      <b>SK-01</b><strong>Meja &amp; Kerusi</strong><span data-live-code="SK-01">13 rekod</span>
+    </button>
+    <button onclick="openSub('SK-02 — Promosi Barang Jualan')">
+      <b>SK-02</b><strong>Promosi Barang Jualan</strong><span data-live-code="SK-02">11 rekod</span>
+    </button>
+    <button onclick="openSub('SK-03 — Jualan Musim Perayaan')">
+      <b>SK-03</b><strong>Jualan Musim Perayaan</strong><span data-live-code="SK-03">9 rekod</span>
+    </button>
+    <button onclick="openSub('SK-04 — Renovasi')">
+      <b>SK-04</b><strong>Renovasi</strong><span data-live-code="IKL-03">10 rekod</span>
+    </button>
+  </div>
+</section>
+
+<section class="page" id="page-cari">
+  <div class="page-head"><div><h2>Carian Lesen</h2><p>Cari maklumat pemegang atau nombor lesen.</p></div></div>
+  <div class="big-search"><span>⌕</span><input id="globalSearch" placeholder="Nama pemegang / nombor lesen" oninput="searchRecords()"></div>
+  <div class="record-list" id="searchResults"></div>
+</section>
+
+<section class="page" id="page-laporan">
+  <div class="page-head"><div><h2>Laporan & Statistik</h2><p>Ringkasan keseluruhan operasi jabatan.</p></div></div>
+  <div class="report-total"><span>Jumlah Keseluruhan</span><b>128</b><small>Rekod perlesenan</small></div>
+  <div class="status">
+    <div class="status-row"><span>Aktif</span><b>96 • 75%</b></div>
+    <div class="status-row"><span>Dalam Proses</span><b>22 • 17%</b></div>
+    <div class="status-row"><span>Tamat</span><b>10 • 8%</b></div>
+    <div class="bar"><i></i><i></i><i></i></div>
+  </div>
+  <div class="report-grid"><div><b>54</b><span>Iklan</span></div><div><b>31</b><span>Liquor</span></div><div><b>43</b><span>Siar Kaki</span></div></div>
+  <button class="full-btn" onclick="showToast('Laporan sedang disediakan')">▣ Jana Laporan</button>
+</section>
+
+<section class="page" id="page-more">
+  <div class="page-head"><div><h2>More</h2><p>Fungsi tambahan sistem.</p></div></div>
+
+<div class="category-code-reference" id="categoryCodeReference" style="display:none">
+  <div class="code-ref-head">
+    <div><b>Struktur Kod Kategori</b><small>Kod standard operasi Jabatan Lesen</small></div>
+    <span>V22</span>
+  </div>
+  <div class="code-ref-grid">
+    <div><b>IKL</b><span>Iklan</span><small>IKL-01-01 hingga IKL-03</small></div>
+    <div><b>LIQ</b><span>Liquor</span><small>LIQ-01 hingga LIQ-04</small></div>
+    <div><b>SK</b><span>Siar Kaki</span><small>SK-01 hingga SK-04</small></div>
+  </div>
+</div>
+<button id="mobileSyncButton" class="more-item sync-more" onclick="syncGoogleSheets()">↻ &nbsp; SYNC DATA GOOGLE SHEETS <span>→</span></button>
+<div class="more-list">
+  <div class="account-panel" id="accountPanel" style="display:none">
+    <div class="account-avatar" id="moreAvatar">A</div>
+    <div><b id="moreUserName">Administrator</b><small id="moreRole">ADMIN • AKSES PENUH</small></div>
+    <button onclick="logout()">Keluar</button>
+  </div>
+
+    <button class="login-more-btn" type="button" onclick="openLogin(); return false;">🔐 <span><strong>LOG MASUK</strong><small>Admin / Penyelia</small></span><b>›</b></button>
+    <button id="userManagementButton" style="display:none" onclick="goPage('pengguna')">◎ <span>Pengurusan Pengguna</span><b>›</b></button>
+    <button onclick="showToast('Profil pengguna')">◉ <span>Profil Pengguna</span><b>›</b></button>
+    <button onclick="showToast('Tetapan sistem')">⚙ <span>Tetapan Sistem</span><b>›</b></button>
+    <button onclick="showToast('Pusat bantuan')">?</span> <span>Bantuan</span><b>›</b></button>
+    <button onclick="showToast('Versi 1.0.0')">ⓘ <span>Tentang Sistem</span><b>›</b></button>
+  </div>
+</section>
+
+
+<section class="page" id="page-pengguna">
+  <div class="page-head"><div><h2>Pengurusan Pengguna</h2><p>Admin mengawal akaun dan akses penyelia.</p></div><button class="admin-add" onclick="openSupervisorModal()">+ Tambah</button></div>
+  <div class="permission-note"><b>ADMIN:</b> boleh tambah penyelia, ubah akses dan nyahaktifkan akaun. <b>PENYELIA:</b> hanya melihat modul yang diberi akses.</div>
+  <div class="admin-panel">
+    <h3>Senarai Penyelia</h3><p>Setiap penyelia boleh mempunyai kombinasi akses yang berbeza.</p>
+    <table class="admin-table"><thead><tr><th>Nama</th><th>Username</th><th>Akses</th><th>Status</th><th></th></tr></thead>
+    <tbody id="supervisorRows"></tbody></table>
+  </div>
+</section>
+
+</div></div>
+
+<nav class="bottom">
+  <button class="navitem active" data-page="home" onclick="goPage('home')"><div class="nicon">⌂</div>Home</button>
+  <button class="navitem" data-page="lesen" onclick="goPage('lesen')"><div class="nicon">▤</div>Lesen</button>
+  <button class="navitem scanwrap" data-page="cari" onclick="goPage('cari')"><div class="scan">⌕</div><span>Cari</span></button>
+  <button class="navitem" data-page="laporan" onclick="goPage('laporan')"><div class="nicon">▣</div>Laporan</button>
+  <button class="navitem" data-page="more" onclick="goPage('more')"><div class="nicon">☷</div>More</button>
+</nav>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-lite" id="supervisorModal">
+  <div class="modal-lite-box">
+    <h3>Tambah Penyelia</h3>
+    <div class="modal-lite-form">
+      <input id="supName" placeholder="Nama penyelia">
+      <input id="supUser" placeholder="Username">
+      <input id="supPass" type="password" placeholder="Kata laluan">
+      <label style="font-size:11px;font-weight:800">Akses Modul</label>
+      <div class="checks">
+        <label class="check"><input type="checkbox" value="iklan" checked> Iklan</label>
+        <label class="check"><input type="checkbox" value="liquor"> Liquor</label>
+        <label class="check"><input type="checkbox" value="siarkaki"> Siar Kaki</label>
+        <label class="check"><input type="checkbox" value="lesen"> Semua Rekod</label>
+      </div>
+    </div>
+    <div class="modal-lite-actions"><button class="cancel" onclick="closeSupervisorModal()">Batal</button><button class="confirm" onclick="saveSupervisor()">Simpan</button></div>
+  </div>
+</div>
+
+
+
+
+<script>
+
+function updateAuthGate(){
+  const gate=document.getElementById('authGate');
+  if(currentUser){
+    document.body.classList.remove('auth-locked');
+    if(gate) gate.style.display='none';
+  }else{
+    document.body.classList.add('auth-locked');
+    if(gate) gate.style.display='flex';
+  }
+}
+
+function updateDesktopAuth(){
+  const user=document.getElementById('desktopUser');
+  const loginBtn=document.getElementById('desktopLoginBtn');
+  const logoutBtn=document.getElementById('desktopLogoutBtn');
+  const greeting=document.querySelector('.greeting h1');
+  const roleBadge=document.querySelector('.greeting .role');
+  if(!user||!loginBtn||!logoutBtn)return;
+
+  if(currentUser){
+    user.textContent=(currentUser.role==='ADMIN'?'ADMIN':'PENYELIA')+' • '+currentUser.name.toUpperCase();
+    loginBtn.style.display='none';
+    logoutBtn.style.display='inline-block';
+    if(greeting) greeting.textContent=currentUser.role==='ADMIN'?'Administrator':'Pegawai Penyelia';
+    if(roleBadge) roleBadge.textContent=currentUser.role==='ADMIN'?'ADMIN • FULL ACCESS':'PENYELIA • VIEW ONLY';
+  }else{
+    user.textContent='GUEST • VIEW ONLY';
+    loginBtn.style.display='inline-block';
+    logoutBtn.style.display='none';
+    if(greeting) greeting.textContent='Paparan Umum';
+    if(roleBadge) roleBadge.textContent='PUBLIC • VIEW ONLY';
+  }
+}
+
+
+
+
+function applyRoleLayout(){
+  document.body.classList.remove('admin-mode','supervisor-mode');
+  if(currentUser?.role==='ADMIN'){
+    document.body.classList.add('admin-mode');
+  }else if(currentUser?.role==='PENYELIA'){
+    document.body.classList.add('supervisor-mode');
+  }
+}
+
+function openLogin(){
+  const modal=document.getElementById('loginScreen');
+  if(!modal){showToast('Ralat: paparan login tidak dijumpai');return}
+  modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('loginUser')?.focus(),100);
+}
+function closeLogin(){
+  const modal=document.getElementById('loginScreen');
+  if(!modal)return;
+  modal.classList.add('hidden');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
+function selectLoginRole(role){
+  loginRole=role;
+  document.getElementById('adminRoleBtn').classList.toggle('active',role==='ADMIN');
+  document.getElementById('supervisorRoleBtn').classList.toggle('active',role==='PENYELIA');
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+}
+
+
+
+
+
+/* ===== V28 — GOOGLE SHEETS LIVE DATA ===== */
+const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/AKfycbxVysP1AME6vVzIw3TEpTiwwc9mSM4wiqX0PiTtcLYIeDIZJ7Dx1619WRoRHWJdMBipWw/exec';
+let dataLoadedFromGoogle = false;
+let lastSyncTime = null;
+
+function normalizeRecord(row, moduleCode){
+  const categoryCode = String(row["Kod Kategori"] || "").trim();
+  const type = String(row["Jenis Lesen"] || row["Nama Lesen"] || row["Subkategori"] || "").trim();
+  const no = String(row["No. Lesen"] || row["No Lesen"] || "").trim();
+  const name = String(row["Nama Pemegang / Syarikat"] || row["Nama Pemegang"] || "").trim();
+  const module = moduleCode === "IKL" ? "iklan" : moduleCode === "LIQ" ? "liquor" : "siarkaki";
+  return {
+    name: name || "Tanpa Nama",
+    category_code: categoryCode || moduleCode,
+    type: type || "Lesen",
+    no: no || "-",
+    status: String(row["Status"] || "Tidak Dinyatakan").trim(),
+    module: module,
+    address: String(row["Alamat Premis"] || "").trim(),
+    phone: String(row["No. Telefon"] || "").trim(),
+    application_date: String(row["Tarikh Permohonan"] || "").trim(),
+    start_date: String(row["Tarikh Mula"] || "").trim(),
+    end_date: String(row["Tarikh Tamat"] || "").trim(),
+    officer: String(row["Pegawai Bertugas"] || "").trim(),
+    notes: String(row["Catatan"] || "").trim()
+  };
+}
+
+async function fetchCategory(category){
+  const url = GOOGLE_SHEETS_API + "?action=records&category=" + encodeURIComponent(category) + "&t=" + Date.now();
+  const response = await fetch(url, {cache:"no-store"});
+  if(!response.ok) throw new Error("HTTP " + response.status);
+  const json = await response.json();
+  if(!json.success) throw new Error(json.error || "API tidak berjaya");
+  return (json.records || []).map(r => normalizeRecord(r, category));
+}
+
+async function syncGoogleSheets(showMessage=true){
+  if(!currentUser){
+    showToast("Sila log masuk dahulu");
+    return;
+  }
+  try{
+    if(showMessage) showToast("Mengambil data Google Sheets...");
+    const [ikl, liq, sk] = await Promise.all([
+      fetchCategory("IKL"),
+      fetchCategory("LIQ"),
+      fetchCategory("SK")
+    ]);
+    records.length = 0;
+    records.push(...ikl, ...liq, ...sk);
+    dataLoadedFromGoogle = true;
+    lastSyncTime = new Date();
+
+    updateDashboardCounts();
+    if(document.getElementById("page-lesen")?.classList.contains("active")) renderRecords(records);
+    if(document.getElementById("page-cari")?.classList.contains("active")) searchRecords();
+
+    if(showMessage) showToast("Data berjaya disegerakkan • " + records.length + " rekod");
+  }catch(error){
+    console.error("Google Sheets sync error:", error);
+    showToast("Gagal sambung Google Sheets");
+  }
+}
+
+function updateDashboardCounts(){
+  const counts = {
+    IKL: records.filter(r=>r.category_code.startsWith("IKL-")).length,
+    LIQ: records.filter(r=>r.category_code.startsWith("LIQ-")).length,
+    SK: records.filter(r=>r.category_code.startsWith("SK-")).length
+  };
+  const all = counts.IKL + counts.LIQ + counts.SK;
+
+  const setText=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+  setText("homeCountIKL", counts.IKL);
+  setText("homeCountLIQ", counts.LIQ);
+  setText("homeCountSK", counts.SK);
+  setText("homeCountALL", all);
+  setText("pageCountIKL", counts.IKL);
+  setText("pageCountLIQ", counts.LIQ);
+  setText("pageCountSK", counts.SK);
+
+  // Update subcategory record counts using the official codes.
+  document.querySelectorAll("[data-live-code]").forEach(el=>{
+    const code=el.dataset.liveCode;
+    el.textContent=records.filter(r=>r.category_code===code).length+" rekod";
+  });
+}
+
+async function initializeGoogleData(){
+  if(!currentUser) return;
+  await syncGoogleSheets(false);
+}
+
+const records=[
+ {name:'ABC Trading Sdn. Bhd.',category_code:'IKL-01-01',type:'Papan Tanda Bercahaya',no:'JL-2026-000001',status:'Aktif',module:'iklan'},
+ {name:'Kedai Maju Jaya',category_code:'IKL-02',type:'Bunting',no:'JL-2026-000002',status:'Aktif',module:'iklan'},
+ {name:'Restoran Borneo',category_code:'LIQ-01',type:'Rumah Awam',no:'JL-2026-000003',status:'Proses',module:'liquor'},
+ {name:'Syarikat Harapan',category_code:'SK-01',type:'Meja & Kerusi',no:'JL-2026-000004',status:'Aktif',module:'siarkaki'},
+ {name:'Mega Enterprise',category_code:'SK-04',type:'Renovasi',no:'JL-2026-000005',status:'Tamat',module:'siarkaki'},
+ {name:'Borneo Promotion',category_code:'SK-02',type:'Promosi Barang Jualan',no:'JL-2026-000006',status:'Aktif',module:'siarkaki'}
+];
+
+const categoryMaster={
+ iklan:{
+   code:'IKL',name:'Iklan',
+   items:[
+    {code:'IKL-01',name:'Papan Tanda',children:[
+      {code:'IKL-01-01',name:'Bercahaya'},
+      {code:'IKL-01-02',name:'Tidak Bercahaya'}
+    ]},
+    {code:'IKL-02',name:'Bunting'},
+    {code:'IKL-03',name:'Kain Rentang'}
+   ]
+ },
+ liquor:{
+   code:'LIQ',name:'Liquor',
+   items:[
+    {code:'LIQ-01',name:'Rumah Awam'},
+    {code:'LIQ-02',name:'Rumah Bir'},
+    {code:'LIQ-03',name:'Lesen Borong'},
+    {code:'LIQ-04',name:'Lesen Runcit'}
+   ]
+ },
+ siarkaki:{
+   code:'SK',name:'Siar Kaki',
+   items:[
+    {code:'SK-01',name:'Meja & Kerusi'},
+    {code:'SK-02',name:'Promosi Barang Jualan'},
+    {code:'SK-03',name:'Jualan Musim Perayaan'},
+    {code:'SK-04',name:'Renovasi'}
+   ]
+ }
+};
+
+let loginRole='ADMIN';
+let currentUser=null;
+ records.length=0; dataLoadedFromGoogle=false; updateDashboardCounts();
+ updateDesktopAuth();
+ updateAuthGate();
+ document.body.classList.remove('admin-mode','supervisor-mode');
+let supervisors=JSON.parse(localStorage.getItem('jl_supervisors')||'null') || [
+ {name:'Pegawai Penyelia',user:'penyelia',pass:'123456',access:['iklan','liquor','siarkaki','lesen'],active:true},
+ {name:'Penyelia Iklan',user:'iklan01',pass:'123456',access:['iklan'],active:true},
+ {name:'Penyelia Liquor',user:'liquor01',pass:'123456',access:['liquor'],active:true}
+];
+
+function showToast(msg){
+ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+ clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),1800)
+}
+
+
+
+function login(e){
+ e.preventDefault();
+ const u=document.getElementById('loginUser').value.trim(), p=document.getElementById('loginPass').value;
+ if(loginRole==='ADMIN' && u==='admin' && p==='admin123'){
+   currentUser={name:'Administrator',user:u,role:'ADMIN',access:['iklan','liquor','siarkaki','lesen']};
+ }else if(loginRole==='PENYELIA'){
+   const s=supervisors.find(x=>x.user===u && x.pass===p && x.active);
+   if(!s){showToast('Username atau kata laluan salah');return}
+   currentUser={name:s.name,user:s.user,role:'PENYELIA',access:s.access};
+ }else{showToast('Username atau kata laluan salah');return}
+
+ const moreAvatar=document.getElementById('moreAvatar');
+ const moreUserName=document.getElementById('moreUserName');
+ const moreRole=document.getElementById('moreRole');
+ const accountPanel=document.getElementById('accountPanel');
+ const userManagementButton=document.getElementById('userManagementButton');
+
+ if(moreAvatar) moreAvatar.textContent=currentUser.role==='ADMIN'?'A':'P';
+ if(moreUserName) moreUserName.textContent=currentUser.role==='ADMIN'?'Administrator':currentUser.name;
+ if(moreRole) moreRole.textContent=currentUser.role==='ADMIN'
+   ?'ADMIN • AKSES PENUH'
+   :'PENYELIA • '+currentUser.access.map(x=>x.toUpperCase()).join(' + ');
+ if(accountPanel) accountPanel.style.display='flex';
+ const codeRef=document.getElementById('categoryCodeReference'); if(codeRef) codeRef.style.display=currentUser.role==='ADMIN'?'block':'none';
+ if(userManagementButton) userManagementButton.style.display=currentUser.role==='ADMIN'?'flex':'none';
+
+ applyRoleLayout();
+ updateDesktopAuth();
+ updateAuthGate();
+ initializeGoogleData();
+
+ closeLogin();
+ showToast('Log masuk berjaya sebagai '+currentUser.role);
+ showToast('Log masuk berjaya sebagai '+currentUser.role);
+}
+function logout(){
+ currentUser=null;
+ document.body.classList.remove('admin-mode','supervisor-mode','admin-desktop');
+ const accountPanel=document.getElementById('accountPanel');
+ const userManagementButton=document.getElementById('userManagementButton');
+ if(accountPanel) accountPanel.style.display='none';
+ const codeRef=document.getElementById('categoryCodeReference'); if(codeRef) codeRef.style.display='none';
+ if(userManagementButton) userManagementButton.style.display='none';
+ goPage('home');
+ showToast('Log keluar berjaya');
+}
+function hasAccess(page){
+ if(!currentUser)return false;
+ if(currentUser.role==='ADMIN')return true;
+ return currentUser.access.includes(page);
+}
+function goPage(page){
+ if(['iklan','liquor','siarkaki','lesen'].includes(page) && currentUser && !hasAccess(page)){
+   showToast('Akses tidak diberikan kepada penyelia ini');return;
+ }
+ if(page==='pengguna' && currentUser?.role!=='ADMIN'){
+   showToast('Hanya Admin boleh mengurus pengguna');return;
+ }
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ const target=document.getElementById('page-'+page);if(target)target.classList.add('active');
+ document.querySelectorAll('.navitem').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+ document.querySelectorAll('[data-admin-page]').forEach(b=>b.classList.toggle('active',b.dataset.adminPage===page));
+ if(page==='lesen')renderRecords(records);
+ if(page==='cari')searchRecords();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function showCategory(c){goPage(c==='A'?'iklan':c==='B'?'liquor':'siarkaki')}
+function showAll(){goPage('lesen')}
+function showStats(){goPage('laporan')}
+function openSearch(){goPage('cari');setTimeout(()=>document.getElementById('globalSearch').focus(),120)}
+function openSub(title){showToast(title+' dibuka')}
+function showMore(){goPage('more')}
+function openRecords(){goPage('lesen')}
+function nav(btn,name){goPage(name.toLowerCase())}
+
+function renderRecords(list){
+ const el=document.getElementById('recordList');if(!el)return;
+ let visible=list;
+ if(currentUser?.role==='PENYELIA')visible=list.filter(r=>currentUser.access.includes(r.module)||currentUser.access.includes('lesen'));
+ el.innerHTML=visible.map(r=>`<button class="record" onclick="openSub('${r.no} — ${r.name}')"><div class="record-icon">▣</div><div class="record-main"><b>${r.name}</b><small><b>${r.category_code}</b> • ${r.type} • ${r.no}</small></div><span class="record-status ${r.status==='Proses'?'process':r.status==='Tamat'?'expired':''}">${r.status}</span></button>`).join('')||'<div class="record"><div class="record-main"><b>Tiada rekod untuk akses ini.</b></div></div>';
+}
+function filterRecords(btn,status){
+ document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+ const list=status==='Semua'?records:records.filter(r=>r.status===status);renderRecords(list)
+}
+function searchRecords(){
+ const q=(document.getElementById('globalSearch')?.value||'').toLowerCase();
+ let list=records.filter(r=>(r.name+' '+r.type+' '+r.no).toLowerCase().includes(q));
+ if(currentUser?.role==='PENYELIA')list=list.filter(r=>currentUser.access.includes(r.module)||currentUser.access.includes('lesen'));
+ const el=document.getElementById('searchResults');if(!el)return;
+ el.innerHTML=list.map(r=>`<button class="record" onclick="openSub('${r.no} — ${r.name}')"><div class="record-icon">⌕</div><div class="record-main"><b>${r.name}</b><small><b>${r.category_code}</b> • ${r.type} • ${r.no}</small></div><span class="record-status ${r.status==='Proses'?'process':r.status==='Tamat'?'expired':''}">${r.status}</span></button>`).join('')||'<div class="record"><div class="record-main"><b>Tiada hasil carian.</b></div></div>';
+}
+function openSupervisorModal(){
+ if(currentUser?.role!=='ADMIN'){showToast('Hanya Admin boleh tambah penyelia');return}
+ document.getElementById('supervisorModal').classList.add('show')
+}
+function closeSupervisorModal(){document.getElementById('supervisorModal').classList.remove('show')}
+function saveSupervisor(){
+ const name=document.getElementById('supName').value.trim(),user=document.getElementById('supUser').value.trim(),pass=document.getElementById('supPass').value;
+ const access=[...document.querySelectorAll('#supervisorModal input[type=checkbox]:checked')].map(x=>x.value);
+ if(!name||!user||!pass||!access.length){showToast('Lengkapkan maklumat dan pilih akses');return}
+ if(supervisors.some(x=>x.user===user)||user==='admin'){showToast('Username telah digunakan');return}
+ supervisors.push({name,user,pass,access,active:true});localStorage.setItem('jl_supervisors',JSON.stringify(supervisors));
+ renderSupervisors();closeSupervisorModal();showToast('Penyelia berjaya ditambah');
+ ['supName','supUser','supPass'].forEach(id=>document.getElementById(id).value='')
+}
+function renderSupervisors(){
+ const el=document.getElementById('supervisorRows');if(!el)return;
+ el.innerHTML=supervisors.map((s,i)=>`<tr><td><b>${s.name}</b></td><td>${s.user}</td><td><div class="access-tags">${s.access.map(a=>`<span class="access-tag">${a==='lesen'?'SEMUA REKOD':a.toUpperCase()}</span>`).join('')}</div></td><td>${s.active?'Aktif':'Tidak Aktif'}</td><td><button onclick="toggleSupervisor(${i})" style="border:0;background:#eee;border-radius:8px;padding:5px;font-size:9px">${s.active?'Nyahaktif':'Aktifkan'}</button></td></tr>`).join('')
+}
+function toggleSupervisor(i){
+ supervisors[i].active=!supervisors[i].active;localStorage.setItem('jl_supervisors',JSON.stringify(supervisors));renderSupervisors();showToast('Status penyelia dikemaskini')
+}
+renderSupervisors();
+goPage('home');
+
+document.addEventListener('DOMContentLoaded',()=>{
+  updateAuthGate();
+});
+</script>
+
+</body>
+</html>
